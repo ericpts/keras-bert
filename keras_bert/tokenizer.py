@@ -109,7 +109,7 @@ class Tokenizer(object):
             else:
                 spaced += ch
         tokens = []
-        for word in spaced.strip().split():
+        for word in text.strip().split():
             tokens += self._word_piece_tokenize(word)
         return tokens
 
@@ -136,6 +136,8 @@ class Tokenizer(object):
     @staticmethod
     def _is_punctuation(ch):
         code = ord(ch)
+        if ch in '<>':
+            return False
         return 33 <= code <= 47 or \
             58 <= code <= 64 or \
             91 <= code <= 96 or \

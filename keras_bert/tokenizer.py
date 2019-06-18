@@ -98,19 +98,12 @@ class Tokenizer(object):
             text = unicodedata.normalize('NFD', text)
             text = ''.join([ch for ch in text if unicodedata.category(ch) != 'Mn'])
             text = text.lower()
-        spaced = ''
-        for ch in text:
-            if self._is_punctuation(ch) or self._is_cjk_character(ch):
-                spaced += ' ' + ch + ' '
-            elif self._is_space(ch):
-                spaced += ' '
-            elif ord(ch) == 0 or ord(ch) == 0xfffd or self._is_control(ch):
-                continue
-            else:
-                spaced += ch
         tokens = []
         for word in text.strip().split():
-            tokens += self._word_piece_tokenize(word)
+            cur_tokens = self._word_piece_tokenize(word)
+            for token in tokens:
+                assert token in self._token_dict
+            tokens += cur_tokens
         return tokens
 
     def _word_piece_tokenize(self, word):
